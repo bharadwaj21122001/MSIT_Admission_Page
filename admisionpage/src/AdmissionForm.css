@@ -1,0 +1,140 @@
+/* Container for the form */
+.form-container {
+    display: flex;
+    justify-content: flex-end; /* Aligns the form towards the right */
+    align-items: flex-start; /* Aligns items to the top */
+    height: 100vh; /* Full viewport height */
+    width: 100%;
+    padding-right: 50px; /* Adds space from the extreme right */
+    background-color: #242222; /* Dark background for the page */
+    position: relative; /* For precise positioning adjustments */
+}
+
+/* Form box styling with reduced height */
+.application-form {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc; /* Straight edges (no curve) */
+    width: 100%; /* Ensures responsiveness */
+    max-width: 350px; /* Makes the form section smaller */
+    height: 400px; /* Reduced height */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+    margin-left: 50px;
+    margin-top: 50px; /* Moves the form box downwards */
+    overflow-y: auto; /* Allows scrolling if content overflows */
+}
+
+/* Form groups and labels */
+.application-form .form-group {
+    margin-bottom: 15px;
+}
+
+.application-form .form-label {
+    font-weight: bold;
+}
+
+/* Form Heading styling */
+.form-heading {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Input field styling */
+.application-form input,
+.application-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px; /* Slightly rounded corners */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); /* Inner shadow for better visibility */
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.application-form input:focus,
+.application-form textarea:focus {
+    border-color: #007bff; /* Blue border on focus */
+    box-shadow: inset 0 2px 5px rgba(0, 123, 255, 0.2); /* Highlighted inner shadow */
+    outline: none; /* Removes default outline */
+}
+
+/* Select box styling */
+.application-form select {
+    appearance: none; /* Removes default browser styles for dropdown */
+    -webkit-appearance: none; /* Ensures compatibility with WebKit browsers */
+    -moz-appearance: none; /* Ensures compatibility with Mozilla browsers */
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px; /* Slightly rounded edges */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); /* Inner shadow */
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    background-color: #ffffff;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,5" style="fill:%23999"/></svg>'); /* Dropdown arrow */
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* Positions the arrow inside the select box */
+    background-size: 10px; /* Size of the arrow */
+    cursor: pointer; /* Indicates the element is interactive */
+}
+
+.application-form select:focus {
+    border-color: #007bff; /* Blue border on focus */
+    box-shadow: inset 0 2px 5px rgba(0, 123, 255, 0.2); /* Highlighted inner shadow on focus */
+    outline: none; /* Removes default outline */
+}
+
+/* To ensure consistent styling across different browsers */
+.application-form select::-ms-expand {
+    display: none; /* Removes the default dropdown arrow for IE/Edge */
+}
+
+/* Button styling */
+.application-form button {
+    display: block;
+    margin: 20px auto 0; /* Centers the button inside the form */
+    padding: 8px 20px;
+    font-size: 14px;
+}
+
+/* Left text container styling */
+.text-container {
+    margin-right: auto; /* Pushes the text container to the left */
+    padding-left: 30px; /* Adds spacing from the extreme left */
+    max-width: 500px; /* Optional: limits the width of the text container */
+    color: whitesmoke;
+    text-align: left; /* Ensures text is aligned to the left */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Aligns content at the top */
+}
+
+/* Bold text */
+.bold-text {
+    font-size: 20px;
+    margin-bottom: 15px; /* Adds space below the bold text */
+}
+
+/* Small text */
+.small-text {
+    font-size: 16px;
+    margin-top: 10px; /* Optional: Adds space above the small text */
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .form-container {
+        flex-direction: column;
+        align-items: center;
+        padding-right: 0;
+    }
+
+    .text-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .application-form {
+        margin: 0;
+    }
+}

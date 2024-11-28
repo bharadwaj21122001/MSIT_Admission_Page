@@ -1,0 +1,41 @@
+/* Footer container styling */
+.footer {
+    background-color: #ffffff; /* Dark background */
+    color: #292727; /* White text color */
+    padding: 10px 0; /* Reduced padding for smaller height */
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  /* Center the footer content */
+  .footer .text-center {
+    text-align: center;
+  }
+  
+  /* Styling the text inside the footer */
+  .footer p {
+    margin: -3px 0; /* Reduced margin for smaller footer */
+    font-size: 14px; /* Smaller text for a more compact footer */
+  }
+  
+  /* Styling the links in the footer */
+  .footer a {
+    color: #1f1f1e; /* Yellow color for links */
+    text-decoration: none;
+    /* font-weight: bold; */
+  }
+  
+  .footer a:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .footer {
+      padding: 8px 0; /* Even smaller padding on mobile */
+    }
+    .footer p {
+      font-size: 13px; /* Smaller text for mobile screens */
+    }
+  }  

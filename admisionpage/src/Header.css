@@ -1,0 +1,24 @@
+/* Header.css */
+
+/* Change the color to light black and adjust text size */
+.header-text {
+    color: #37465A; /* Light black / dark gray */
+    font-size: 1.4622rem; /* Smaller text size */
+    white-space: nowrap; /* Ensure the text stays on one line */
+    line-height: 1.9375rem;
+    top: 6.125rem;
+    left: 1.1875rem;
+    height: 1.9375rem;
+    z-index: 13;
+    overflow: hidden; /* Hide overflow if the text doesn't fit */
+    text-overflow: ellipsis; /* Add ellipsis if the text is too long */
+    font-weight: bold; /* Keep the text bold */
+    font-family: Arial;
+  }
+  
+  @media (max-width: 768px) {
+    .header-text {
+      font-size: 1rem; /* Reduce text size further on smaller screens */
+    }
+  }
+  
