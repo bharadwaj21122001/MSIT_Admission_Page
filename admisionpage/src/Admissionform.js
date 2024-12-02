@@ -37,6 +37,10 @@ function AdmissionForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (formData.phoneNumber.length !== 10 || isNaN(formData.phoneNumber)) {
+      alert("Please enter a valid 10-digit phone numeber.")
+      return;
+    }
     if (!showRecaptcha) {
       setShowRecaptcha(true);
       return;
@@ -62,7 +66,7 @@ function AdmissionForm() {
       {/* Form Section */}
       <div className="form-container">
         <Form onSubmit={handleSubmit}>
-          <h3>Confirm Slot</h3>
+          <h3>Confirm your slot</h3>
           <Form.Group controlId="fullName">
             <Form.Control
               type="text"
@@ -99,16 +103,19 @@ function AdmissionForm() {
           <Form.Group controlId="qualification">
             <Form.Control
               as="select"
+              className="custom-select"
               name="qualification"
               value={formData.qualification}
               onChange={handleQualificationChange}
               required
             >
-              <option value="">Highest Qualification</option>
+              <option value="" disabled>
+                Highest Qualification
+              </option>
               <option value="Bachelors">B.E/B.Tech</option>
               <option value="Masters">MCA</option>
               <option value="PhD">MSC</option>
-              <option value="Others">Other</option>
+              <option value="Other">Other</option>
             </Form.Control>
           </Form.Group>
 
