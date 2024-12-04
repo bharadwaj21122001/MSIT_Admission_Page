@@ -18,6 +18,7 @@ function AdmissionForm() {
   const [showRecaptcha, setShowRecaptcha] = useState(false);
   const [phoneError, setPhoneError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [aadharError, setAadharError] = useState("");
   const [formStatus, setFormStatus] = useState("");
 
   // Function to extract query parameters
@@ -25,7 +26,9 @@ function AdmissionForm() {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     const regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
     const results = regex.exec(window.location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    return results === null
+      ? ""
+      : decodeURIComponent(results[1].replace(/\+/g, " "));
   };
 
   useEffect(() => {
@@ -61,61 +64,73 @@ function AdmissionForm() {
   };
 
   const validateEmail = (email) => {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|net|org|edu|gov)$/i;
+    const emailPattern =
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|net|org|edu|gov)$/i;
     return emailPattern.test(email);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     let isValid = true;
     setFormStatus("");
-
+  
+    // Reset error messages
+    setPhoneError("");
+    setEmailError("");
+    setAadharError("");
+  
     // Phone number validation
     if (!/^\d{10}$/.test(formData.phoneNumber)) {
       setPhoneError("Please enter a valid 10-digit phone number.");
       isValid = false;
     }
-
+  
     // Email validation
     if (!validateEmail(formData.email)) {
       setEmailError("Please enter a valid email address.");
       isValid = false;
     }
-
+  
+    // Aadhar number validation
+    if (!/^\d{12}$/.test(formData.aadharNumber)) {
+      setAadharError("Please enter a valid 12-digit Aadhar number.");
+      isValid = false;
+    }
+  
     if (!isValid) return;
-
+  
     if (!showRecaptcha) {
       setShowRecaptcha(true);
       return;
     }
-
+  
     if (!recaptchaValue) {
       alert("Please complete the CAPTCHA.");
       return;
     }
-
+  
     try {
-      const scriptURL = "https://script.google.com/macros/s/AKfycbxt_YLME0Qmfb_xDXAKCPYr6MtCEPoSEQ5eh0S6nQHDqjWSHcWBMqI83JlW9iByHxf0aA/exec"; // Replace with your Apps Script deployment URL
+      const scriptURL =
+        "https://script.google.com/macros/s/AKfycbwkWM_NLsEm_qNFznpBHO7p1bS-gdGmfoVdpCjUitXjXMl-pxBaCvo2ONDZT6deR2Md/exec";
+  
       const response = await fetch(scriptURL, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-          fullName: formData.fullName,
-          phoneNumber: formData.phoneNumber,
-          email: formData.email,
-          qualification: formData.qualification,
-          greGateScore: formData.greGateScore || "",
-          aadharNumber: formData.aadharNumber,
-          utm_source: document.getElementById("utm_source_field")?.value || "",
-          utm_id: document.getElementById("utm_id_field")?.value || "",
+          "Full Name": formData.fullName,
+          "Phone Number": formData.phoneNumber,
+          "Email": formData.email,
+          "Highest Qualifications": formData.qualification,
+          "Aadhar number": formData.aadharNumber,
         }),
       });
-
+  
       const result = await response.json();
-      if (result.status === "success") {
+      console.log("Server Response:", result);
+      if (result.result === "success") {
         setFormStatus("Form submitted successfully!");
         setFormData({
           fullName: "",
@@ -131,14 +146,19 @@ function AdmissionForm() {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      setFormStatus("There was an error submitting the form. Please try again.");
+      setFormStatus(
+        "There was an error submitting the form. Please try again."
+      );
     }
-  };
+  };    
 
   return (
     <div className="form-page-container">
       <div className="text-container">
-        <h2>Admissions for 2024 are closed now. Applications for 2025 will open in January 2025.</h2>
+        <h2>
+          Admissions for 2024 are closed now. Applications for 2025 will open in
+          January 2025.
+        </h2>
         <p>Fill out the form, and we will notify you when applications open.</p>
       </div>
 
@@ -164,7 +184,11 @@ function AdmissionForm() {
               onChange={handleChange}
               required
             />
-            {phoneError && <Alert variant="danger" className="mt-2">{phoneError}</Alert>}
+            {phoneError && (
+              <Alert variant="danger" className="mt-2">
+                {phoneError}
+              </Alert>
+            )}
           </Form.Group>
           <Form.Group controlId="email">
             <Form.Control
@@ -175,7 +199,11 @@ function AdmissionForm() {
               onChange={handleChange}
               required
             />
-            {emailError && <Alert variant="danger" className="mt-2">{emailError}</Alert>}
+            {emailError && (
+              <Alert variant="danger" className="mt-2">
+                {emailError}
+              </Alert>
+            )}
           </Form.Group>
           <Form.Group controlId="qualification">
             <Form.Control
@@ -185,11 +213,13 @@ function AdmissionForm() {
               onChange={handleQualificationChange}
               required
             >
-              <option value="" disabled>Select Qualification</option>
-              <option value="Bachelors">B.E/B.Tech</option>
-              <option value="Masters">MCA</option>
-              <option value="PhD">MSC</option>
-              <option value="Other">Other</option>
+              <option value="" disabled>
+                Select Qualification
+              </option>
+              <option value="B.E/B.Tech">B.E/B.Tech</option>
+              <option value="MCA">MCA</option>
+              <option value="MSC">MSC</option>
+              <option value="Others">Others</option>
             </Form.Control>
           </Form.Group>
           {formData.qualification === "Other" && (
@@ -221,6 +251,11 @@ function AdmissionForm() {
               onChange={handleChange}
               required
             />
+            {aadharError && (
+              <Alert variant="danger" classname="mt-2">
+                {aadharError}
+              </Alert>
+            )}
           </Form.Group>
           {showRecaptcha && (
             <ReCAPTCHA
@@ -228,10 +263,15 @@ function AdmissionForm() {
               onChange={handleRecaptchaChange}
             />
           )}
-          <Button type="submit" variant="primary" className="mt-3">Submit</Button>
+          <Button type="submit" variant="primary" className="mt-3">
+            Submit
+          </Button>
         </Form>
         {formStatus && (
-          <Alert variant={formStatus.includes("success") ? "success" : "danger"} className="mt-3">
+          <Alert
+            variant={formStatus.includes("success") ? "success" : "danger"}
+            className="mt-3"
+          >
             {formStatus}
           </Alert>
         )}
