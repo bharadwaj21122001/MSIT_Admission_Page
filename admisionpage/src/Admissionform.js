@@ -18,7 +18,7 @@ function AdmissionForm() {
   const [showRecaptcha, setShowRecaptcha] = useState(false);
   const [phoneError, setPhoneError] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [formStatus, setFormStatus] = useState(""); // To handle form submission status messages
+  const [formStatus, setFormStatus] = useState("");
 
   // Function to extract query parameters
   const getQueryParam = (name) => {
@@ -30,25 +30,15 @@ function AdmissionForm() {
 
   useEffect(() => {
     // Get UTM parameters from URL
-    const utm_source = getQueryParam("utm_source");
-    const utm_id = getQueryParam("utm_id");
+    const utm_source = getQueryParam("utm_source") || "";
+    const utm_id = getQueryParam("utm_id") || "";
 
-    // Map UTM source values to desired values
-    const sourceMap = {
-      lkd: "lkd",
-      inst: "inst",
-      bulk_email: "bulk_email",
-    };
-
-    // Update hidden fields if UTM parameters are present
-    if (utm_source && sourceMap[utm_source]) {
-      const sourceField = document.getElementById("field-e75fc277be0be4a39ef832c8743fbe47-4");
-      if (sourceField) sourceField.value = sourceMap[utm_source];
+    // Dynamically update hidden fields
+    if (utm_source) {
+      document.getElementById("utm_source_field").value = utm_source;
     }
-
     if (utm_id) {
-      const idField = document.getElementById("field-e75fc277be0be4a39ef832c8743fbe47-5");
-      if (idField) idField.value = utm_id;
+      document.getElementById("utm_id_field").value = utm_id;
     }
   }, []);
 
@@ -58,16 +48,12 @@ function AdmissionForm() {
       [e.target.name]: e.target.value,
     });
 
-    // Clear errors as user types
     if (e.target.name === "phoneNumber") setPhoneError("");
     if (e.target.name === "email") setEmailError("");
   };
 
   const handleQualificationChange = (e) => {
-    setFormData({
-      ...formData,
-      qualification: e.target.value,
-    });
+    setFormData({ ...formData, qualification: e.target.value });
   };
 
   const handleRecaptchaChange = (value) => {
@@ -83,10 +69,10 @@ function AdmissionForm() {
     e.preventDefault();
 
     let isValid = true;
-    setFormStatus(""); // Reset form status before submission
+    setFormStatus("");
 
     // Phone number validation
-    if (formData.phoneNumber.length !== 10 || isNaN(formData.phoneNumber)) {
+    if (!/^\d{10}$/.test(formData.phoneNumber)) {
       setPhoneError("Please enter a valid 10-digit phone number.");
       isValid = false;
     }
@@ -110,29 +96,12 @@ function AdmissionForm() {
     }
 
     try {
-      // Send the reCAPTCHA response to the server for verification
-      const recaptchaResponse = recaptchaValue;  // The response token
-      const secretKey = "6Lc51YsqAAAAANPc0SVbXck-PzRTyvGfDWM1tOoG"; // Replace with your reCAPTCHA secret key
-
-      const recaptchaVerification = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-        method: "POST",
-        body: new URLSearchParams({
-          secret: secretKey,
-          response: recaptchaResponse,
-        }),
-      });
-
-      const recaptchaResult = await recaptchaVerification.json();
-
-      if (!recaptchaResult.success) {
-        alert("reCAPTCHA verification failed. Please try again.");
-        return;
-      }
-
-      // Now submit the form to the Google Apps Script
-      const scriptURL = "https://script.google.com/macros/library/d/18swqgyrnn3s8r5_TWXEbq1uOZ83aRl_JCviiC5yJ5MraP3e5dADgS1iI/1"; // Replace with your Google Apps Script deployment URL
+      const scriptURL = "https://script.google.com/macros/s/AKfycbxt_YLME0Qmfb_xDXAKCPYr6MtCEPoSEQ5eh0S6nQHDqjWSHcWBMqI83JlW9iByHxf0aA/exec"; // Replace with your Apps Script deployment URL
       const response = await fetch(scriptURL, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
         body: new URLSearchParams({
           fullName: formData.fullName,
           phoneNumber: formData.phoneNumber,
@@ -140,8 +109,8 @@ function AdmissionForm() {
           qualification: formData.qualification,
           greGateScore: formData.greGateScore || "",
           aadharNumber: formData.aadharNumber,
-          utm_source: document.getElementById("field-e75fc277be0be4a39ef832c8743fbe47-4").value,
-          utm_id: document.getElementById("field-e75fc277be0be4a39ef832c8743fbe47-5").value,
+          utm_source: document.getElementById("utm_source_field")?.value || "",
+          utm_id: document.getElementById("utm_id_field")?.value || "",
         }),
       });
 
@@ -168,19 +137,14 @@ function AdmissionForm() {
 
   return (
     <div className="form-page-container">
-      {/* Text Section */}
       <div className="text-container">
-        <h2>Admissions for 2024 are closed now. Applications for the year 2025 will open in January 2025.</h2>
-        <p>
-          Interested candidates can fill out the application form. We will get
-          back to you regarding the admission procedure in January 2025.
-        </p>
+        <h2>Admissions for 2024 are closed now. Applications for 2025 will open in January 2025.</h2>
+        <p>Fill out the form, and we will notify you when applications open.</p>
       </div>
 
-      {/* Form Section */}
       <div className="form-container">
         <Form onSubmit={handleSubmit}>
-          <h3>Confirm your slot</h3>
+          <h3>Confirm Your Slot</h3>
           <Form.Group controlId="fullName">
             <Form.Control
               type="text"
@@ -191,7 +155,6 @@ function AdmissionForm() {
               required
             />
           </Form.Group>
-
           <Form.Group controlId="phoneNumber">
             <Form.Control
               type="text"
@@ -201,13 +164,8 @@ function AdmissionForm() {
               onChange={handleChange}
               required
             />
-            {phoneError && (
-              <Alert variant="danger" className="mt-2">
-                {phoneError}
-              </Alert>
-            )}
+            {phoneError && <Alert variant="danger" className="mt-2">{phoneError}</Alert>}
           </Form.Group>
-
           <Form.Group controlId="email">
             <Form.Control
               type="email"
@@ -217,32 +175,23 @@ function AdmissionForm() {
               onChange={handleChange}
               required
             />
-            {emailError && (
-              <Alert variant="danger" className="mt-2">
-                {emailError}
-              </Alert>
-            )}
+            {emailError && <Alert variant="danger" className="mt-2">{emailError}</Alert>}
           </Form.Group>
-
           <Form.Group controlId="qualification">
             <Form.Control
               as="select"
-              className="custom-select"
               name="qualification"
               value={formData.qualification}
               onChange={handleQualificationChange}
               required
             >
-              <option value="" disabled>
-                Highest Qualification
-              </option>
+              <option value="" disabled>Select Qualification</option>
               <option value="Bachelors">B.E/B.Tech</option>
               <option value="Masters">MCA</option>
               <option value="PhD">MSC</option>
               <option value="Other">Other</option>
             </Form.Control>
           </Form.Group>
-
           {formData.qualification === "Other" && (
             <Form.Group controlId="otherQualification">
               <Form.Control
@@ -254,17 +203,15 @@ function AdmissionForm() {
               />
             </Form.Group>
           )}
-
           <Form.Group controlId="greGateScore">
             <Form.Control
               type="text"
-              placeholder="Valid GRE/GATE score (Optional)"
+              placeholder="GRE/GATE Score (Optional)"
               name="greGateScore"
               value={formData.greGateScore}
               onChange={handleChange}
             />
           </Form.Group>
-
           <Form.Group controlId="aadharNumber">
             <Form.Control
               type="text"
@@ -275,23 +222,16 @@ function AdmissionForm() {
               required
             />
           </Form.Group>
-
-          {/* reCAPTCHA */}
           {showRecaptcha && (
             <ReCAPTCHA
-              sitekey="6Lc51YsqAAAAANPc0SVbXck-PzRTyvGfDWM1tOoG" // Replace with your reCAPTCHA site key
+              sitekey="6Lc51YsqAAAAANPc0SVbXck-PzRTyvGfDWM1tOoG" // Replace with your ReCAPTCHA site key
               onChange={handleRecaptchaChange}
             />
           )}
-
-          <Button type="submit" variant="primary" className="mt-3">
-            Submit
-          </Button>
+          <Button type="submit" variant="primary" className="mt-3">Submit</Button>
         </Form>
-
-        {/* Form Submission Status */}
         {formStatus && (
-          <Alert variant={formStatus === "Form submitted successfully!" ? "success" : "danger"} className="mt-3">
+          <Alert variant={formStatus.includes("success") ? "success" : "danger"} className="mt-3">
             {formStatus}
           </Alert>
         )}
