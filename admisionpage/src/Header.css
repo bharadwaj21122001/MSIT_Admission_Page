@@ -1,24 +1,61 @@
 /* Header.css */
 
-/* Change the color to light black and adjust text size */
+/* Header container styling */
+.header-container {
+  width: 100%;
+  background-color: #222;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Ensures no overflow issues */
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Header text styling */
 .header-text {
-    color: #37465A; /* Light black / dark gray */
-    font-size: 1.4622rem; /* Smaller text size */
-    white-space: nowrap; /* Ensure the text stays on one line */
-    line-height: 1.9375rem;
-    top: 6.125rem;
-    left: 1.1875rem;
-    height: 1.9375rem;
-    z-index: 13;
-    overflow: hidden; /* Hide overflow if the text doesn't fit */
-    text-overflow: ellipsis; /* Add ellipsis if the text is too long */
-    font-weight: bold; /* Keep the text bold */
-    font-family: Arial;
-  }
+  color: #37465A; /* White color for better visibility */
+  font-size: 1.5rem; /* Adjust font size for better readability */
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  text-align: center; /* Center align text */
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis for truncated text */
+}
   
-  @media (max-width: 768px) {
-    .header-text {
-      font-size: 1rem; /* Reduce text size further on smaller screens */
-    }
+  /* Adjust for medium-sized screens (tablets, iPads, etc.) */
+@media (max-width: 1024px) {
+  .header-text {
+      font-size: 1.25rem; /* Slightly smaller text */
+      top: 4rem; /* Adjust positioning for smaller devices */
+      left: 1rem; /* Adjust padding on smaller screens */
+      max-width: 85%; /* Ensure the text fits well */
   }
+}
+
+/* Adjust for small screens (phones, iPad Mini, etc.) */
+@media (max-width: 768px) {
+  .header-text {
+      font-size: 1rem; /* Reduce text size for small screens */
+      top: 3rem; /* Adjust vertical positioning */
+      left: 0.5rem; /* Add margin for left alignment */
+      max-width: 100%; /* Allow full-width display */
+      white-space: normal; /* Allow the text to wrap if necessary */
+      text-align: center; /* Center the text for better layout */
+  }
+}
+
+/* Adjust for extra-small screens (mobile phones in portrait mode) */
+@media (max-width: 480px) {
+  .header-text {
+      font-size: 0.9rem; /* Further reduce text size */
+      top: 2.5rem; /* Adjust vertical alignment */
+      left: 0.5rem;
+      padding: 0 1rem; /* Add padding for spacing */
+      white-space: normal; /* Allow wrapping */
+      text-align: left; /* Align text to the left */
+  }
+}
   

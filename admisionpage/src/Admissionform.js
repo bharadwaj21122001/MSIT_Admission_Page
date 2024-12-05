@@ -159,7 +159,7 @@ function AdmissionForm() {
           Admissions for 2024 are closed now. Applications for 2025 will open in
           January 2025.
         </h2>
-        <p>Fill out the form, and we will notify you when applications open.</p>
+        <p>Interested candidates can fill out the application form. We will get back to you regarding the admission procedure in January 2025.</p>
       </div>
 
       <div className="form-container">
