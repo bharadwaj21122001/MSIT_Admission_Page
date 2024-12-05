@@ -112,7 +112,7 @@ function AdmissionForm() {
   
     try {
       const scriptURL =
-        "https://script.google.com/macros/s/AKfycbwkWM_NLsEm_qNFznpBHO7p1bS-gdGmfoVdpCjUitXjXMl-pxBaCvo2ONDZT6deR2Md/exec";
+        "https://script.google.com/macros/s/AKfycbyorz_JztMJ4M6grBYJRuoto8I60HaSNnrw-tLkW4T5TG4yckbh2gURZzObV2MjNSR-/exec";
   
       const response = await fetch(scriptURL, {
         method: "POST",
@@ -141,6 +141,8 @@ function AdmissionForm() {
           greGateScore: "",
           aadharNumber: "",
         });
+        setShowRecaptcha(false);
+        setShowRecaptcha(null);
       } else {
         setFormStatus("Error submitting form. Please try again.");
       }
